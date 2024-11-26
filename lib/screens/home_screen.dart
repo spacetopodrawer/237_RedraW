@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../services/processing_service.dart';
 import '../widgets/import_section.dart';
 import '../widgets/processing_section.dart';
 import '../widgets/results_section.dart';
-import '../widgets/map_section.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});

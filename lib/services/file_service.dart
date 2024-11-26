@@ -1,5 +1,4 @@
 import 'package:file_picker/file_picker.dart';
-import '../models/rinex_file.dart';
 
 class FileService {
   Future<RinexFile?> pickRinexFile() async {

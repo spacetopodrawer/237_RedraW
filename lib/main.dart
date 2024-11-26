@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'services/file_service.dart';
-import 'models/rinex_file.dart';
 import 'widgets/import_section.dart';
 import 'widgets/processing_section.dart';
 import 'widgets/results_section.dart';

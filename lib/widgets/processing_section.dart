@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import '../models/rinex_file.dart';
 
 class ImportSection extends StatelessWidget {
   final RinexFile? selectedFile;

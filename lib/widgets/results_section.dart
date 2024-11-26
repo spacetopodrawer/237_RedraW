@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import '../models/processing_result.dart';
 
 class ResultsSection extends StatelessWidget {
   final ProcessingResult? results;
