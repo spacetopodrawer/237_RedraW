@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>237_RedraW</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Modal d'authentification -->
+    <div id="auth-modal" class="modal">
+        <div class="modal-content">
+            <div class="auth-tabs">
+                <button class="tab-button active" data-tab="login">Connexion</button>
+                <button class="tab-button" data-tab="register">Inscription</button>
+            </div>
+            
+            <form id="login-form" class="auth-form">
+                <h2>Connexion</h2>
+                <input type="email" placeholder="Email" required>
+                <input type="password" placeholder="Mot de passe" required>
+                <button type="submit">Se connecter</button>
+                <a href="#" id="forgot-password">Mot de passe oublié?</a>
+                <p class="contact-info">Contact: spacetopodrawer@gmail.com</p>
+            </form>
+
+            <form id="register-form" class="auth-form" style="display: none;">
+                <h2>Inscription</h2>
+                <input type="text" placeholder="Nom" required>
+                <input type="email" placeholder="Email" required>
+                <input type="password" placeholder="Mot de passe" required>
+                <input type="text" placeholder="Organisation (optionnel)">
+                <button type="submit">S'inscrire</button>
+                <p class="contact-info">Contact: spacetopodrawer@gmail.com</p>
+            </form>
+        </div>
+    </div>
+
+    <!-- Application principale -->
+    <div id="app" style="display: none;">
+        <div class="main-container">
+            <!-- Carte principale -->
+            <div id="map" class="map-container"></div>
+            
+            <!-- Panneau de contrôle -->
+            <div class="controls-panel">
+                <div class="widget-buttons">
+                    <button class="widget-btn" data-widget="mode">
+                        <i class="fas fa-exchange-alt"></i>
+                        <span>Mode</span>
+                    </button>
+                    <button class="widget-btn" data-widget="import">
+                        <i class="fas fa-file-import"></i>
+                        <span>Import</span>
+                    </button>
+                    <button class="widget-btn" data-widget="process">
+                        <i class="fas fa-cogs"></i>
+                        <span>Traitement</span>
+                    </button>
+                    <button class="widget-btn" data-widget="rtk">
+                        <i class="fas fa-satellite"></i>
+                        <span>RTK</span>
+                    </button>
+                    <button class="widget-btn" data-widget="layers">
+                        <i class="fas fa-layer-group"></i>
+                        <span>Calques</span>
+                    </button>
+                    <button class="widget-btn" data-widget="tools">
+                        <i class="fas fa-tools"></i>
+                        <span>Outils</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Panneaux de widgets -->
+            <div class="widget-panels">
+                <!-- Mode -->
+                <div id="mode-panel" class="widget-panel">
+                    <h3>Mode</h3>
+                    <div class="mode-buttons">
+                        <button class="mode-btn active" data-mode="post-process">Post-traitement</button>
+                        <button class="mode-btn" data-mode="rtk">RTK</button>
+                    </div>
+                </div>
+
+                <!-- Import -->
+                <div id="import-panel" class="widget-panel">
+                    <h3>Import des données</h3>
+                    <div class="file-info">
+                        <h4>Formats supportés :</h4>
+                        <ul>
+                            <li>RINEX 2.x/3.x (.obs, .nav, .rnx)</li>
+                            <li>NMEA (.nmea, .txt)</li>
+                            <li>KML/KMZ (.kml, .kmz)</li>
+                            <li>DXF (.dxf)</li>
+                            <li>SHP (.shp)</li>
+                            <li>CSV (.csv)</li>
+                        </ul>
+                    </div>
+                    <form id="uploadForm">
+                        <input type="file" id="fileInput" multiple>
+                        <button type="submit">Importer</button>
+                    </form>
+                    <div id="uploadStatus"></div>
+                </div>
+
+                <!-- Traitement -->
+                <div id="process-panel" class="widget-panel">
+                    <h3>Paramètres de traitement</h3>
+                    <div class="processing-options">
+                        <div class="option-group">
+                            <label>Méthode:</label>
+                            <select id="processingMethod">
+                                <option value="spp">SPP (Single Point Positioning)</option>
+                                <option value="ppp">PPP (Precise Point Positioning)</option>
+                                <option value="base-rover">Base-Rover</option>
+                            </select>
+                        </div>
+
+                        <!-- Options SPP -->
+                        <div id="sppOptions" class="method-options">
+                            <div class="option-item">
+                                <label>Angle de masque (°):</label>
+                                <input type="number" id="maskAngle" value="10" min="0" max="45">
+                            </div>
+                            <div class="option-item">
+                                <label>Modèle troposphérique:</label>
+                                <select id="troposphereModel">
+                                    <option value="saastamoinen">Saastamoinen</option>
+                                    <option value="hopfield">Hopfield</option>
+                                    <option value="neill">Neill</option>
+                                </select>
+                            </div>
+                            <div class="option-item">
+                                <label>Modèle ionosphérique:</label>
+                                <select id="ionosphereModel">
+                                    <option value="klobuchar">Klobuchar</option>
+                                    <option value="nequick">NeQuick</option>
+                                    <option value="none">Aucun</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Options Base-Rover -->
+                        <div id="baseRoverOptions" class="method-options" style="display: none;">
+                            <div class="option-item">
+                                <label>Fichier de base:</label>
+                                <input type="file" id="baseFileInput" accept=".obs,.rnx">
+                            </div>
+                        </div>
+
+                        <div class="option-group">
+                            <label>Période:</label>
+                            <div class="time-range">
+                                <input type="datetime-local" id="startTime">
+                                <input type="datetime-local" id="endTime">
+                            </div>
+                        </div>
+                    </div>
+                    <button id="processButton" disabled>Lancer le traitement</button>
+                    <div id="processingStatus"></div>
+                </div>
+
+                <!-- RTK -->
+                <div id="rtk-panel" class="widget-panel">
+                    <h3>Configuration RTK</h3>
+                    <div class="rtk-options">
+                        <select id="rtkMode">
+                            <option value="rover">Rover</option>
+                            <option value="base">Base</option>
+                        </select>
+                        <div id="roverConfig">
+                            <h4>Configuration Rover</h4>
+                            <div class="option-item">
+                                <label>Source de correction:</label>
+                                <select id="correctionSource">
+                                    <option value="ntrip">NTRIP</option>
+                                    <option value="radio">Radio</option>
+                                    <option value="bluetooth">Bluetooth</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div id="baseConfig" style="display: none;">
+                            <h4>Configuration Base</h4>
+                            <div class="option-item">
+                                <label>Position:</label>
+                                <select id="basePosition">
+                                    <option value="fixed">Position fixe</option>
+                                    <option value="auto">Auto-position</option>
+                                </select>
+                            </div>
+                            <div class="coordinates-input">
+                                <input type="number" id="baseLat" placeholder="Latitude" step="0.000001">
+                                <input type="number" id="baseLon" placeholder="Longitude" step="0.000001">
+                                <input type="number" id="baseAlt" placeholder="Altitude" step="0.1">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Calques -->
+                <div id="layers-panel" class="widget-panel">
+                    <h3>Gestion des calques</h3>
+                    <div class="layer-list">
+                        <div class="layer-group">
+                            <h4>Fond de carte</h4>
+                            <select id="baseMapLayer">
+                                <option value="osm">OpenStreetMap</option>
+                                <option value="satellite">Satellite</option>
+                                <option value="terrain">Terrain</option>
+                            </select>
+                        </div>
+                        <div class="layer-group">
+                            <h4>Données</h4>
+                            <div class="layer-item">
+                                <input type="checkbox" id="trackLayer" checked>
+                                <label for="trackLayer">Traces GNSS</label>
+                            </div>
+                            <div class="layer-item">
+                                <input type="checkbox" id="pointsLayer" checked>
+                                <label for="pointsLayer">Points de mesure</label>
+                            </div>
+                            <div class="layer-item">
+                                <input type="checkbox" id="baseStationsLayer">
+                                <label for="baseStationsLayer">Stations de base</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Outils -->
+                <div id="tools-panel" class="widget-panel">
+                    <h3>Outils</h3>
+                    <div class="tools-group">
+                        <h4>Entités</h4>
+                        <button id="createPoint">Point</button>
+                        <button id="createLine">Ligne</button>
+                        <button id="createPolygon">Polygone</button>
+                    </div>
+                    <div class="tools-group">
+                        <h4>Mesures</h4>
+                        <button id="measureDistance">Distance</button>
+                        <button id="measureArea">Surface</button>
+                    </div>
+                    <div class="tools-group">
+                        <h4>Export</h4>
+                        <button id="exportData">Exporter données</button>
+                        <button id="generateReport">Générer rapport</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Résultats -->
+            <div id="results-panel" class="results-panel">
+                <div class="results-tabs">
+                    <button class="tab-button active" data-tab="coordinates">Coordonnées</button>
+                    <button class="tab-button" data-tab="statistics">Statistiques</button>
+                    <button class="tab-button" data-tab="quality">Qualité</button>
+                </div>
+                <div id="results"></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script type="module" src="/js/script.js"></script>
+</body>
+</html>
