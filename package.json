@@ -1,8 +1,12 @@
 {
   "name": "237-redraw",
   "version": "1.0.0",
-  "description": "Application de post-traitement GNSS multiplateforme",
+  "description": "Carte InterActive et Positionnement Assisté",
   "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/spacetopodrawer/237_RedraW.git"
+  },
   "scripts": {
     "start": "node server/index.js",
     "dev:server": "node --watch server/index.js",
@@ -18,11 +22,16 @@
     "rinex",
     "utm",
     "ppp",
-    "nmea"
+    "nmea",
+    "carte-interactive",
+    "positionnement",
+    "cameroun"
   ],
-  "author": "",
+  "author": "spacetopodrawer",
   "license": "ISC",
   "dependencies": {
+    "@headlessui/react": "^1.7.17",
+    "@heroicons/react": "^2.1.1",
     "express": "^4.18.2",
     "cors": "^2.8.5",
     "multer": "^1.4.5-lts.1",
@@ -39,17 +48,3 @@
     "jszip": "^3.10.1",
     "bcrypt": "^5.1.1",
     "jsonwebtoken": "^9.0.2",
-    "mongoose": "^8.0.1",
-    "firebase": "^10.7.1",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "react-router-dom": "^6.21.1"
-  },
-  "devDependencies": {
-    "@types/react": "^18.2.43",
-    "@types/react-dom": "^18.2.17",
-    "@vitejs/plugin-react": "^4.2.1",
-    "firebase-tools": "^13.0.2",
-    "vite": "^5.0.8"
-  }
-}
