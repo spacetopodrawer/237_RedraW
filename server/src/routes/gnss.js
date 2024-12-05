@@ -1,5 +1,4 @@
 import express from 'express';
-
 const router = express.Router();
 
 router.post('/process', async (req, res, next) => {

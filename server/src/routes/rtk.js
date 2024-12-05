@@ -1,6 +1,4 @@
 import express from 'express';
-import { authenticateToken } from '../middleware/auth.js';
-
 const router = express.Router();
 
 router.post('/connect', async (req, res, next) => {
