@@ -1,6 +1,6 @@
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
-import { UserModel } from '../models/user.model';
+import { env } from '../config/env';
 
 export class AuthService {
   static async hashPassword(password: string): Promise<string> {
@@ -12,7 +12,7 @@ export class AuthService {
   }
 
   static generateToken(userId: string): string {
-    return jwt.sign({ userId }, process.env.JWT_SECRET || 'your-secret-key', {
+    return jwt.sign({ userId }, env.JWT_SECRET, {
       expiresIn: '24h'
     });
   }
