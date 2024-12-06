@@ -1,6 +1,6 @@
 import { Router } from 'express';
-import { GNSSController } from '../controllers/gnss.controller';
-import { authMiddleware } from '../middleware/auth.middleware';
+import { GNSSController } from '../controllers/gnss.controller.js';
+import { authMiddleware } from '../middleware/auth.middleware.js';
 
 const router = Router();
 

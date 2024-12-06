@@ -1,22 +1,28 @@
 services:
   - type: web
-    name: gnss-app-api
+    name: gnss-237-api-v2
     env: node
     buildCommand: npm install && npm run build:server
     startCommand: node dist/server/index.js
     envVars:
       - key: MONGODB_URI
-        sync: false
+        value: mongodb+srv://spacetopodrawer:237AlexandraEvaHinri237@237-redraw.uydhx.mongodb.net/?retryWrites=true&w=majority&appName=237-RedraW
       - key: JWT_SECRET
         generateValue: true
       - key: NODE_ENV
         value: production
 
   - type: static
-    name: gnss-app-client
-    buildCommand: npm run build:client
+    name: gnss-237-client-v2
+    buildCommand: npm install && npm run build:client
     staticPublishPath: dist/client
     routes:
       - type: rewrite
         source: /*
         destination: /index.html
+    envVars:
+      - key: VITE_API_URL
+        fromService:
+          name: gnss-237-api-v2
+          type: web
+          property: url

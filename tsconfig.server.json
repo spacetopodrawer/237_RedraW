@@ -9,7 +9,9 @@
     "outDir": "dist/server",
     "rootDir": "server",
     "types": ["node"],
-    "sourceMap": true
+    "sourceMap": true,
+    "allowJs": true,
+    "resolveJsonModule": true
   },
   "include": ["server/**/*"],
   "exclude": ["node_modules"]

@@ -1,0 +1,15 @@
+[build]
+builder = "NIXPACKS"
+buildCommand = "npm run build:server"
+
+[deploy]
+startCommand = "node dist/server/index.js"
+restartPolicyType = "ON_FAILURE"
+
+[[services]]
+name = "mongodb"
+type = "mongodb"
+
+[[services]]
+name = "api"
+type = "web"

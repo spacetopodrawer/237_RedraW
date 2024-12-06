@@ -1,7 +1,10 @@
 import { config } from 'dotenv';
 import { cleanEnv, str } from 'envalid';
 
-config();
+// Charge les variables d'environnement depuis .env en développement
+if (process.env.NODE_ENV !== 'production') {
+  config();
+}
 
 export const env = cleanEnv(process.env, {
   MONGODB_URI: str({

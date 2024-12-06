@@ -1,0 +1,7 @@
+<Page xmlns="http://schemas.nativescript.org/tns.xsd" navigatingTo="onNavigatingTo">
+    <ActionBar title="GNSS Post-Processing" />
+    <StackLayout>
+        <Label text="Bienvenue sur l'application GNSS" class="title" />
+        <Button text="Se connecter" tap="{{ onLoginTap }}" class="btn btn-primary" />
+    </StackLayout>
+</Page>

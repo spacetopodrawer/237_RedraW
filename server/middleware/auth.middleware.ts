@@ -1,5 +1,10 @@
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
+import { env } from '../config/env.js';
+
+interface JwtPayload {
+  userId: string;
+}
 
 export function authMiddleware(req: Request, res: Response, next: NextFunction) {
   try {
@@ -8,7 +13,7 @@ export function authMiddleware(req: Request, res: Response, next: NextFunction) 
       return res.status(401).json({ error: 'No token provided' });
     }
 
-    const decoded = jwt.verify(token, process.env.JWT_SECRET || 'your-secret-key');
+    const decoded = jwt.verify(token, env.JWT_SECRET) as JwtPayload;
     req.user = decoded;
     next();
   } catch (error) {
